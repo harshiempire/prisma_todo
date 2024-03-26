@@ -9,21 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUser = exports.updateUser = exports.insertUser = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-function insertUser(username, password, firstName, lastName) {
-    return __awaiter(this, void 0, void 0, function* () {
+function insertUser(_a) {
+    return __awaiter(this, arguments, void 0, function* ({ username, password, firstName, lastName, }) {
         const res = yield prisma.user.create({
             data: {
                 email: username,
-                password,
                 firstname: firstName,
                 lastname: lastName,
+                password: password,
             },
         });
-        console.log(res);
+        return res;
     });
 }
+exports.insertUser = insertUser;
 function updateUser(username_1, _a) {
     return __awaiter(this, arguments, void 0, function* (username, { firstName, lastName }) {
         const res = yield prisma.user.update({
@@ -36,12 +38,12 @@ function updateUser(username_1, _a) {
         console.log(res);
     });
 }
+exports.updateUser = updateUser;
 function getUser() {
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield prisma.user.findMany();
         console.log(res);
+        return res;
     });
 }
-// insertUser("harshith3","harshi123","harshi3","alle3")
-// updateUser("harshith1",{firstName:"harshi1",lastName:"malle1"})
-getUser();
+exports.getUser = getUser;

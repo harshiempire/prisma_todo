@@ -3,21 +3,26 @@ import { get } from "http";
 
 const prisma = new PrismaClient();
 
-async function insertUser(
-  username: string,
-  password: string,
-  firstName: string,
-  lastName: string
-) {
+async function insertUser({
+  username,
+  password,
+  firstName,
+  lastName,
+}: {
+  username: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+}) {
   const res = await prisma.user.create({
     data: {
       email: username,
-      password,
       firstname: firstName,
       lastname: lastName,
+      password: password,
     },
   });
-  console.log(res);
+  return res;
 }
 
 interface UpdateParams {
@@ -42,14 +47,11 @@ async function updateUser(
 async function getUser() {
   const res = await prisma.user.findMany();
   console.log(res);
+  return res;
 }
 
 // insertUser("harshith3","harshi123","harshi3","alle3")
 // updateUser("harshith1",{firstName:"harshi1",lastName:"malle1"})
 // getUser();
 
-module.exports = {
-  insertUser,
-  updateUser,
-  getUser,
-};
+export { insertUser, updateUser, getUser };
