@@ -5,11 +5,11 @@ const prisma = new PrismaClient();
 
 /**
  * Asynchronously inserts a new user into the database.
- * 
+ *
  * This function takes an object containing the user's username, password,
  * first name, and last name, and uses the Prisma ORM to create a new user
  * entry in the database. The `username` is stored as the user's email.
- * 
+ *
  * @param {Object} userDetails - The details of the user to insert.
  * @param {string} userDetails.username - The username (email) of the user.
  * @param {string} userDetails.password - The password of the user.
@@ -27,7 +27,13 @@ async function insertUser({
   firstName: string;
   lastName: string;
   password: string;
-}) {
+}): Promise<{
+  id: number;
+  email: string;
+  firstname: string | null;
+  lastname: string | null;
+  password: string;
+}> {
   const res = await prisma.user.create({
     data: {
       email: username, // User's email, derived from the username parameter
