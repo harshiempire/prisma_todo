@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { get } from "http";
 
 const prisma = new PrismaClient();
 
@@ -45,4 +46,10 @@ async function getUser() {
 
 // insertUser("harshith3","harshi123","harshi3","alle3")
 // updateUser("harshith1",{firstName:"harshi1",lastName:"malle1"})
-getUser();
+// getUser();
+
+module.exports = {
+  insertUser,
+  updateUser,
+  getUser,
+};
