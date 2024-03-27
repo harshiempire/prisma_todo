@@ -1,4 +1,3 @@
-Certainly! Below is a suggested README test for your project:
 
 ---
 
