@@ -1,11 +1,13 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
-  import { insertUser, updateUser, getUser } from "./index";
+import { insertUser, updateUser, getUser } from "./index";
+import cors from "cors";
 
 const prisma = new PrismaClient();
 const app = express();
 const port = "3000";
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
@@ -21,10 +23,10 @@ const signUpZod = z.object({
 
 /**
  * Handles the user signup process.
- * 
+ *
  * This endpoint receives user signup data, validates it, and attempts to create a new user.
  * It responds with a success message or an error if the user cannot be created.
- * 
+ *
  * @param {Request} req - The request object, containing the user's signup information.
  * @param {Response} res - The response object used to send back the HTTP response.
  */
@@ -33,7 +35,8 @@ app.post("/signup", async (req: Request, res: Response) => {
   console.log(req.body);
 
   // Validate the request body using the signUpZod schema.
-  const { success } = signUpZod.safeParse(req.body);
+  const { success, error }: any = signUpZod.safeParse(req.body); // Remember to keep the names correct in postman
+  console.log(success, error);
 
   // If validation fails, respond with an error message.
   if (!success) {
@@ -109,6 +112,45 @@ app.get("/get", async (req: Request, res: Response) => {
   res.json({
     result,
   });
+});
+
+app.post("/addtodos", async (req: Request, res: Response) => {
+  try {
+    const todos = await prisma.todo.create({
+      data: {
+        title: req.body.title,
+        description: req.body.description,
+        userId: req.body.userId,
+      },
+    });
+    console.log(todos);
+    return res.json({
+      todos,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({
+      message: "Cannot add/Check the id",
+    });
+  }
+});
+
+app.get("/gettodos", async (req: Request, res: Response) => {
+  try {
+    const result = await prisma.todo.findMany({
+      where: {
+        userId: req.body.userId,
+      },
+    });
+    return res.json({
+      result,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.json({
+      message: "Cannot get/Check the id",
+    });
+  }
 });
 
 app.listen(port, () => {
