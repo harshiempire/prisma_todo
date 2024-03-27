@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
-import { insertUser, updateUser, getUser } from "./index";
+import { insertUser, getUser } from "./index";
 import cors from "cors";
 
 const prisma = new PrismaClient();
